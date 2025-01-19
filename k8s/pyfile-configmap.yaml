@@ -5,8 +5,9 @@ metadata:
 data:
   pyfile: |
     # -*- coding: utf-8 -*-
-    import redis
     from collections import deque
+    from datetime import datetime  # Importa datetime para capturar data e hora
+    import redis
 
     def handler(input: dict, context: object) -> dict:
         """
@@ -40,10 +41,15 @@ data:
                 avg_util = sum(context.env['cpu_data'][f"cpu_{i}"]) / len(context.env['cpu_data'][f"cpu_{i}"])
                 cpu_utilization[f"avg-util-{i}-60sec"] = avg_util
 
+        # Captura a data e hora da atualização
+        last_updated = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
         # Prepara o resultado final
         result = {
             "percent-network-egress": percent_network_egress,
             "percent-memory-cached": percent_memory_cached,
+            "last_updated": last_updated,  # Adiciona a data/hora no resultado
         }
         result.update(cpu_utilization)
         return result
+
