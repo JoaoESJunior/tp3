@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: dashboard
-          image: joaoesjunior/dashboard:latest # Substitua pela sua imagem no Docker Hub
+          image: joaoesjunior/dashboard:latest 
           ports:
             - containerPort: 8501 # Porta onde o Streamlit roda
           resources:
