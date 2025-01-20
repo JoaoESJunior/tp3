@@ -33,10 +33,12 @@ spec:
         - name: REDIS_INPUT_KEY
           value: "metrics"
         - name: REDIS_OUTPUT_KEY
-          valueFrom:
-            configMapKeyRef:
-              name: outputkey
-              key: REDIS_OUTPUT_KEY
+        - name: REDIS_OUTPUT_KEY
+          value: "joaojunior-proj3-output"  # Atualizado com o identificador correto
+          #valueFrom:
+            #configMapKeyRef:
+              #name: outputkey
+              #key: REDIS_OUTPUT_KEY
       volumes:
       - name: pyfile
         configMap:
