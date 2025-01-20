@@ -12,4 +12,4 @@ spec:
     - protocol: TCP
       port: 80         # Porta no cluster Kubernetes
       targetPort: 8501 # Porta do container (Streamlit)
-      nodePort: 52004  # Porta exposta no nó (altere se necessário)
+      nodePort: 52010  # Porta exposta no nó (altere se necessário)
