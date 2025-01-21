@@ -12,17 +12,20 @@ spec:
       labels:
         app: serverless-runtime
     spec:
+      # 1) Definindo os volumes
+      volumes:
+      - name: pyfile
+        configMap:
+          name: pyfile  # Tem que ser igual ao nome do ConfigMap
+
+      # 2) Definindo os containers
       containers:
       - name: serverless-runtime
-        image: "seu-registro/runtime:latest"  # ajuste para o nome da imagem que você gerou
+        image: "seu-registro/runtime:latest"
         imagePullPolicy: Always
-        resources:
-          requests:
-            cpu: 100m
-            memory: 300Mi
         env:
           - name: REDIS_HOST
-            value: "192.168.121.187"  # IP ou DNS do Redis
+            value: "192.168.121.187"
           - name: REDIS_PORT
             value: "6379"
           - name: REDIS_INPUT_KEY
@@ -33,11 +36,8 @@ spec:
             value: "usermodule"
           - name: FUNCTION_NAME
             value: "handler"
+        # Aqui você monta o volume "pyfile" dentro do container
         volumeMounts:
-          - name: pyfile
+          - name: pyfile              # <-- tem que bater com o "volumes: - name: pyfile"
             mountPath: "/app/usermodule.py"
             subPath: pyfile
-        volumes:
-          - name: pyfile
-            configMap:
-              name: pyfile
