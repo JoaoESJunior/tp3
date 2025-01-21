@@ -20,20 +20,25 @@ spec:
           requests:
             cpu: 100m
             memory: 300Mi
-        volumeMounts:
-        - name: pyfile
-          mountPath: "/app/usermodule.py"  # Certifique-se de que o caminho está correto
-          subPath: pyfile
         env:
-        - name: REDIS_HOST
-          value: "192.168.121.187"
-        - name: REDIS_PORT
-          value: "6379"
-        - name: REDIS_INPUT_KEY
-          value: "metrics"
-        - name: REDIS_OUTPUT_KEY
-          value: "joaojunior-proj3-output"
-      volumes:
-      - name: pyfile
-        configMap:
-          name: pyfile
+          - name: REDIS_HOST
+            value: "192.168.121.187"  # IP do Redis no cluster
+          - name: REDIS_PORT
+            value: "6379"
+          - name: REDIS_INPUT_KEY
+            value: "metrics"
+          - name: REDIS_OUTPUT_KEY
+            value: "joaojunior-proj3-output"
+          - name: FUNCTION_MODULE
+            value: "usermodule"
+          - name: FUNCTION_NAME
+            value: "handler"
+        volumeMounts:
+          - name: pyfile
+            mountPath: "/opt/usermodule.py"
+            subPath: pyfile
+        volumes:
+          - name: pyfile
+            configMap:
+              name: pyfile
+
