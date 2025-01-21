@@ -26,3 +26,10 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "500m"
+          env:
+            - name: REDIS_HOST
+              value: "192.168.121.187"  # Configurar o IP do Redis
+            - name: REDIS_PORT
+              value: "6379"  # Porta padrão do Redis
+            - name: REDIS_OUTPUT_KEY
+              value: "joaojunior-proj3-output"  # Chave que o dashboard irá monitorar
