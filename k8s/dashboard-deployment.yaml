@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: serverless-dashboard
-        image: your-dockerhub-username/serverless-dashboard:latest
+        image: joaoesjunior/dashboard:latest
         ports:
         - containerPort: 8050
         env:
