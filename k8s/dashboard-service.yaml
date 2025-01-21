@@ -3,10 +3,11 @@ kind: Service
 metadata:
   name: serverless-dashboard-service
 spec:
+  type: NodePort
   selector:
     app: serverless-dashboard
   ports:
     - protocol: TCP
-      port: 52001
-      targetPort: 8001
-  type: NodePort
+      port: 52001       # porta "interna" do Service no cluster
+      targetPort: 8001  # porta do contêiner
+      nodePort: 52001   # agora, de fato, expõe a 52001 no nó
