@@ -20,12 +20,9 @@ spec:
           requests:
             cpu: 100m
             memory: 300Mi
-          limits:
-            cpu: 200m
-            memory: 500Mi
         volumeMounts:
         - name: pyfile
-          mountPath: "/opt/usermodule.py"
+          mountPath: "/app/usermodule.py"  # Certifique-se de que o caminho está correto
           subPath: pyfile
         env:
         - name: REDIS_HOST
@@ -36,10 +33,6 @@ spec:
           value: "metrics"
         - name: REDIS_OUTPUT_KEY
           value: "joaojunior-proj3-output"
-        - name: FUNCTION_MODULE
-          value: "usermodule"
-        - name: FUNCTION_NAME
-          value: "handler"
       volumes:
       - name: pyfile
         configMap:
