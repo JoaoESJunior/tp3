@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: serverless-runtime
-        image: <your-dockerhub-username>/serverless-runtime:latest
+        image: joaoesjunior/runtime:latest
         imagePullPolicy: Always
         resources:
           requests:
