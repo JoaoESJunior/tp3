@@ -21,7 +21,7 @@ spec:
       # 2) Definindo os containers
       containers:
       - name: serverless-runtime
-        image: "seu-registro/runtime:latest"
+        image: "joaoesjunior/runtime:latest"
         imagePullPolicy: Always
         env:
           - name: REDIS_HOST
