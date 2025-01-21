@@ -8,5 +8,5 @@ spec:
   ports:
     - protocol: TCP
       port: 52001
-      targetPort: 8050
+      targetPort: 8001
   type: NodePort
