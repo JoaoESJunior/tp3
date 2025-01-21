@@ -6,50 +6,41 @@ data:
   pyfile: |
     # -*- coding: utf-8 -*-
     from collections import deque
-    from datetime import datetime  # Importa datetime para capturar data e hora
-    import redis
+    from datetime import datetime
 
-    def handler(input: dict, context: object) -> dict:
+    def handler(input: dict, context: dict) -> dict:
         """
-        Função serverless que processa métricas de entrada e calcula estatísticas.
+        Exemplo de função serverless que processa métricas de entrada e calcula estatísticas.
         """
-        # Calcula dinamicamente o número de CPUs com base nas chaves do input
         num_cpus = sum(1 for key in input if key.startswith("cpu_percent-"))
+        if "cpu_data" not in context["env"]:
+            from collections import deque
+            context["env"]["cpu_data"] = {f"cpu_{i}": deque(maxlen=12) for i in range(num_cpus)}
 
-        # Inicializa o estado no contexto se ele ainda não existir
-        if 'cpu_data' not in context.env:
-            context.env['cpu_data'] = {f"cpu_{i}": deque(maxlen=12) for i in range(num_cpus)}
-
-        # Calcula o percentual de tráfego de saída da rede
         net_out_total = input.get("net_io_counters_eth0-bytes_sent", 0)
         net_in_total = input.get("net_io_counters_eth0-bytes_recv", 0)
         net_total = net_out_total + net_in_total
-        percent_network_egress = (net_out_total / net_total) * 100 if net_total else 0
+        percent_network_egress = (net_out_total / net_total * 100) if net_total else 0
 
-        # Calcula o percentual de memória em cache
         memory_cached = input.get("virtual_memory-cached", 0)
         memory_buffers = input.get("virtual_memory-buffers", 0)
-        memory_total = input.get("virtual_memory-total", 1)  # Evita divisão por zero
+        memory_total = input.get("virtual_memory-total", 1)
         percent_memory_cached = ((memory_cached + memory_buffers) / memory_total) * 100
 
-        # Calcula a média móvel de uso de cada CPU
         cpu_utilization = {}
         for i in range(num_cpus):
             key = f"cpu_percent-{i}"
             if key in input:
-                context.env['cpu_data'][f"cpu_{i}"].append(input[key])
-                avg_util = sum(context.env['cpu_data'][f"cpu_{i}"]) / len(context.env['cpu_data'][f"cpu_{i}"])
+                context["env"]["cpu_data"][f"cpu_{i}"].append(input[key])
+                avg_util = sum(context["env"]["cpu_data"][f"cpu_{i}"]) / len(context["env"]["cpu_data"][f"cpu_{i}"])
                 cpu_utilization[f"avg-util-{i}-60sec"] = avg_util
 
-        # Captura a data e hora da atualização
         last_updated = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        # Prepara o resultado final
         result = {
             "percent-network-egress": percent_network_egress,
             "percent-memory-cached": percent_memory_cached,
-            "last_updated": last_updated,  # Adiciona a data/hora no resultado
+            "last_updated": last_updated,
         }
         result.update(cpu_utilization)
         return result
-

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: serverless-runtime
-        image: joaoesjunior/runtime:latest
+        image: "seu-registro/runtime:latest"  # ajuste para o nome da imagem que você gerou
         imagePullPolicy: Always
         resources:
           requests:
@@ -22,7 +22,7 @@ spec:
             memory: 300Mi
         env:
           - name: REDIS_HOST
-            value: "192.168.121.187"  # IP do Redis no cluster
+            value: "192.168.121.187"  # IP ou DNS do Redis
           - name: REDIS_PORT
             value: "6379"
           - name: REDIS_INPUT_KEY
@@ -35,10 +35,9 @@ spec:
             value: "handler"
         volumeMounts:
           - name: pyfile
-            mountPath: "/opt/usermodule.py"
+            mountPath: "/app/usermodule.py"
             subPath: pyfile
         volumes:
           - name: pyfile
             configMap:
               name: pyfile
-
