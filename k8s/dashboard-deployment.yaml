@@ -1,35 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dashboard
+  name: serverless-dashboard
   labels:
-    app: dashboard
+    app: serverless-dashboard
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dashboard
+      app: serverless-dashboard
   template:
     metadata:
       labels:
-        app: dashboard
+        app: serverless-dashboard
     spec:
       containers:
-        - name: dashboard
-          image: joaoesjunior/dashboard:latest 
-          ports:
-            - containerPort: 8501 # Porta onde o Streamlit roda
-          resources:
-            requests:
-              memory: "256Mi"
-              cpu: "250m"
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
-          env:
-            - name: REDIS_HOST
-              value: "192.168.121.187"  # Configurar o IP do Redis
-            - name: REDIS_PORT
-              value: "6379"  # Porta padrão do Redis
-            - name: REDIS_OUTPUT_KEY
-              value: "joaojunior-proj3-output"  # Chave que o dashboard irá monitorar
+      - name: serverless-dashboard
+        image: your-dockerhub-username/serverless-dashboard:latest
+        ports:
+        - containerPort: 8050
+        env:
+        - name: REDIS_HOST
+          value: "192.168.121.187"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_KEY
+          value: "joaojunior-proj3-output"
