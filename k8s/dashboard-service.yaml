@@ -7,6 +7,6 @@ spec:
     app: serverless-dashboard
   ports:
     - protocol: TCP
-      port: 53007
+      port: 52001
       targetPort: 8050
   type: NodePort
