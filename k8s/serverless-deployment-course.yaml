@@ -1,27 +1,28 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: serverless-redis
+  name: serverless-runtime
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: serverless-redis
+      app: serverless-runtime
   template:
     metadata:
       labels:
-        app: serverless-redis
+        app: serverless-runtime
     spec:
       containers:
-      - name: serverless-redis
-        #image: lucasmsp/serverless:redis
-        image: joaoesjunior/runtime:latest
+      - name: serverless-runtime
+        image: <your-dockerhub-username>/serverless-runtime:latest
         imagePullPolicy: Always
         resources:
           requests:
             cpu: 100m
             memory: 300Mi
+          limits:
+            cpu: 200m
+            memory: 500Mi
         volumeMounts:
         - name: pyfile
           mountPath: "/opt/usermodule.py"
@@ -34,12 +35,11 @@ spec:
         - name: REDIS_INPUT_KEY
           value: "metrics"
         - name: REDIS_OUTPUT_KEY
-        - name: REDIS_OUTPUT_KEY
-          value: "joaojunior-proj3-output"  # Atualizado com o identificador correto
-          #valueFrom:
-            #configMapKeyRef:
-              #name: outputkey
-              #key: REDIS_OUTPUT_KEY
+          value: "joaojunior-proj3-output"
+        - name: FUNCTION_MODULE
+          value: "usermodule"
+        - name: FUNCTION_NAME
+          value: "handler"
       volumes:
       - name: pyfile
         configMap:
