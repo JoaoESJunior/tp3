@@ -30,12 +30,20 @@ spec:
             value: "6379"
           - name: REDIS_INPUT_KEY
             value: "metrics"
-          - name: REDIS_OUTPUT_KEY
-            value: "joaojunior-proj3-output"
+          #- name: REDIS_OUTPUT_KEY
+          #  value: "joaojunior-proj3-output"
+
           - name: FUNCTION_MODULE
             value: "usermodule"
           - name: FUNCTION_NAME
             value: "handler"
+          #
+          - name: REDIS_OUTPUT_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: outputkey           # nome do ConfigMap
+                key: REDIS_OUTPUT_KEY     # nome da key dentro do data:
+          #
         # Aqui você monta o volume "pyfile" dentro do container
         volumeMounts:
           - name: pyfile              # <-- tem que bater com o "volumes: - name: pyfile"
